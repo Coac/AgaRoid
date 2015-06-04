@@ -25,6 +25,8 @@ public class AgaRoid extends ApplicationAdapter {
 	
 	Cell cell;
 	Cell enemyCell;
+	
+	private int minimumAccel = 2;
 	 
 	@Override
 	public void create () {
@@ -78,22 +80,23 @@ public class AgaRoid extends ApplicationAdapter {
             cam.zoom -= 0.02;
         }
         
-		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+		if (Gdx.input.getAccelerometerX() > minimumAccel || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             cam.translate(-3, 0, 0);
             cell.translate(-3, 0);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        if (Gdx.input.getAccelerometerX() < -minimumAccel || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             cam.translate(3, 0, 0);
             cell.translate(3, 0);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        if (Gdx.input.getAccelerometerY() > minimumAccel || Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             cam.translate(0, -3, 0);
             cell.translate(0, -3);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        if (Gdx.input.getAccelerometerY() < -minimumAccel || Gdx.input.isKeyPressed(Input.Keys.UP)) {
             cam.translate(0, 3, 0);
             cell.translate(0, 3);
     
         }
+        
 	}
 }
