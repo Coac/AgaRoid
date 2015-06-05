@@ -1,7 +1,8 @@
 package com.agaroid;
 
-import com.agaroid.cell.*;
-import com.badlogic.gdx.ApplicationAdapter;
+import com.agaroid.cell.CellElementary;
+import com.agaroid.cell.CellPlayer;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -13,7 +14,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 
-public class AgaRoid extends ApplicationAdapter {
+public class AgaRoid extends Game {
 	SpriteBatch batch;
 	SpriteBatch cameraBatch;
 	BitmapFont font;
@@ -70,7 +71,7 @@ public class AgaRoid extends ApplicationAdapter {
 		shapeRenderer.end();
 		
 		cameraBatch.begin();
-			font.draw(cameraBatch, cam.position.toString(),10, Gdx.graphics.getHeight()-10);
+			font.draw(cameraBatch, cam.position.toString(), 10, Gdx.graphics.getHeight() - 10);
 		cameraBatch.end();
 		
 		batch.begin();
