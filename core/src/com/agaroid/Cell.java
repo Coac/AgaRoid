@@ -1,7 +1,6 @@
 package com.agaroid;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -22,7 +21,6 @@ public abstract class Cell {
 
     GlyphLayout glyphLayout;
 
-    private String username;
 	int posX = 200;
 	int posY = 200;
 	int mass = 200;

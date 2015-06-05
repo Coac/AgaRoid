@@ -23,6 +23,8 @@ public class AgaRoid extends ApplicationAdapter {
 	CellPlayer cell;
 	CellPlayer enemyCell;
 	
+	CellElementary cellElementary;
+	
 	private int minimumAccel = 2;
 	 
 	@Override
@@ -37,6 +39,7 @@ public class AgaRoid extends ApplicationAdapter {
         
         cell = new CellPlayer(batch, shapeRenderer, font, "Coac", 0,0, 100);
         enemyCell = new CellPlayer(batch, shapeRenderer, font, "erer", 200, 400, 30);
+        cellElementary = new CellElementary(batch,shapeRenderer, font, 100,100);
         
 	}
 
@@ -55,6 +58,7 @@ public class AgaRoid extends ApplicationAdapter {
 			shapeRenderer.setColor(1, 1, 0, 1);
 			cell.rendererDraw();
 			enemyCell.rendererDraw();
+			cellElementary.rendererDraw();
 		shapeRenderer.end();
 		
 		cameraBatch.begin();
