@@ -1,12 +1,20 @@
 package com.agaroid;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public abstract class Cell {
+	protected SpriteBatch batch;
+	protected GlyphLayout glyphLayout;
+	protected ShapeRenderer shapeRenderer;
+
+	protected Color color;
+	protected int posX = 200;
+	protected int posY = 200;
+	protected int mass = 200;
+
 	public Cell(SpriteBatch batch,
 			ShapeRenderer shapeRenderer, int posX, int posY, int mass) {
 		super();
@@ -17,17 +25,7 @@ public abstract class Cell {
 		this.mass = mass;
         this.color = new Color((float)Math.random(),(float) Math.random(),(float) Math.random(), 1);
 	}
-	SpriteBatch batch;
-    ShapeRenderer shapeRenderer;
 
-    GlyphLayout glyphLayout;
-
-    private String username;
-	int posX = 200;
-	int posY = 200;
-	int mass = 200;
-	
-	Color color;
 
 	
 	public void rendererDraw() {

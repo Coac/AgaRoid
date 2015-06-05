@@ -1,5 +1,6 @@
-package com.agaroid;
+package com.agaroid.cell;
 
+import com.agaroid.Cell;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;

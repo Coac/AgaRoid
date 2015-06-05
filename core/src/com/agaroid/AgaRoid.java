@@ -1,16 +1,12 @@
 package com.agaroid;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.agaroid.cell.CellPlayer;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-
 
 public class AgaRoid extends ApplicationAdapter {
 	SpriteBatch batch;
@@ -19,9 +15,8 @@ public class AgaRoid extends ApplicationAdapter {
 	ShapeRenderer shapeRenderer;
 	OrthographicCamera cam;
 
-	
-	CellPlayer cell;
-	CellPlayer enemyCell;
+	private CellPlayer cell;
+	private CellPlayer enemyCell;
 	
 	private int minimumAccel = 2;
 	 
@@ -65,7 +60,6 @@ public class AgaRoid extends ApplicationAdapter {
         	cell.batchDraw();
         	enemyCell.batchDraw();
         batch.end();
-		 
 	}
 	
 	
@@ -76,7 +70,6 @@ public class AgaRoid extends ApplicationAdapter {
         if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
             cam.zoom -= 0.02;
         }
-        
 		if (Gdx.input.getAccelerometerX() > minimumAccel || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             cam.translate(-3, 0, 0);
             cell.translate(-3, 0);
@@ -94,6 +87,5 @@ public class AgaRoid extends ApplicationAdapter {
             cell.translate(0, 3);
     
         }
-        
 	}
 }
