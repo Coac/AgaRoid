@@ -1,5 +1,10 @@
 package com.agaroid;
 
+import java.net.URISyntaxException;
+import java.util.Arrays;
+
+import org.json.JSONObject;
+
 import com.agaroid.cell.*;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -11,6 +16,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
 
 
 public class AgaRoid extends ApplicationAdapter {
@@ -27,6 +35,8 @@ public class AgaRoid extends ApplicationAdapter {
 	CellElementary cellElementary;
 
 	Trap traptest ;
+	
+	Socket socket;
 
 	private int minimumAccel = 2;
 	 
@@ -46,8 +56,73 @@ public class AgaRoid extends ApplicationAdapter {
         cellElementary = new CellElementary(batch,shapeRenderer, font, 100,100);
 
         traptest = new Trap(batch,shapeRenderer,0,100);
+        
+        
+		socketInit();
 
         
+	}
+
+	private void socketInit() {
+		try {
+			socket = IO.socket("http://localhost:3000");
+		
+	    	socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+	
+	    	  @Override
+	    	  public void call(Object... args) {
+	
+	    	  }
+	
+	    	});
+	    	socket.on("welcome", new Emitter.Listener() {
+	
+	    	  @Override
+	    	  public void call(Object... args) {
+	    		  System.out.println(args[0].toString());
+	    		  System.out.println("welcome");
+	    		  JSONObject obj = new JSONObject();
+	    		  obj.put("name", cell.getUsername());
+	    		  obj.put("hue", 331);
+	    		 
+	    		  
+	    		  socket.emit("gotit", obj);
+	    	  }
+	
+	    	});
+	    	
+	    	socket.on("connect_failed", new Emitter.Listener() {
+	    		
+	    	  @Override
+	    	  public void call(Object... args) {
+	    		  System.out.println("connect_failed");
+	    	  }
+	
+	    	});
+	    	
+	    	socket.on("playerDisconnect", new Emitter.Listener() {
+	    		
+		    	  @Override
+		    	  public void call(Object... args) {
+		    		  System.out.println("playerDisconnect");
+		    	  }
+		
+		    	});
+	    	
+	    	socket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+	
+	    	  @Override
+	    	  public void call(Object... args) {}
+	
+	    	});
+	    	socket.connect();
+	    	socket.emit("foo", new Object());
+    	
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	@Override

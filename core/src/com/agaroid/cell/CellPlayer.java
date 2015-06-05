@@ -1,5 +1,6 @@
 package com.agaroid.cell;
 
+
 import com.agaroid.Cell;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -22,4 +23,7 @@ public class CellPlayer extends Cell {
     public void batchDraw() {
         font.draw(batch, username, posX - glyphLayout.width /2, posY + glyphLayout.height /2);
     }
+	public String getUsername() {
+		return this.username;
+	}
 }
