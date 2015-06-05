@@ -25,8 +25,6 @@ public abstract class Cell {
 		this.mass = mass;
         this.color = new Color((float)Math.random(),(float) Math.random(),(float) Math.random(), 1);
 	}
-
-
 	
 	public void rendererDraw() {
 		shapeRenderer.setColor(color);
@@ -37,8 +35,4 @@ public abstract class Cell {
 		posX += offsetX;
 		posY += offsetY;
 	}
-
-
-	
-	
 }
