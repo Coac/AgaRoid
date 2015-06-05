@@ -6,14 +6,11 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.MathUtils;
+
 
 public class AgaRoid extends ApplicationAdapter {
 	SpriteBatch batch;
@@ -23,8 +20,8 @@ public class AgaRoid extends ApplicationAdapter {
 	OrthographicCamera cam;
 
 	
-	Cell cell;
-	Cell enemyCell;
+	CellPlayer cell;
+	CellPlayer enemyCell;
 	
 	private int minimumAccel = 2;
 	 
@@ -38,8 +35,8 @@ public class AgaRoid extends ApplicationAdapter {
         font.setColor(Color.BLACK);
              
         
-        cell = new Cell(batch, shapeRenderer, font, "Coac", 0,0, 100);
-        enemyCell = new Cell(batch, shapeRenderer, font, "erer", 200, 400, 30);
+        cell = new CellPlayer(batch, shapeRenderer, font, "Coac", 0,0, 100);
+        enemyCell = new CellPlayer(batch, shapeRenderer, font, "erer", 200, 400, 30);
         
 	}
 
