@@ -30,7 +30,7 @@ public abstract class Cell {
 	Color color;
 
 	
-	public void rendererDraw() {
+	public  void rendererDraw() {
 		shapeRenderer.setColor(color);
 		shapeRenderer.circle(posX, posY, mass);
 	}

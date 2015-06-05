@@ -19,10 +19,11 @@ public class AgaRoid extends ApplicationAdapter {
 	ShapeRenderer shapeRenderer;
 	OrthographicCamera cam;
 
+
 	
 	CellPlayer cell;
 	CellPlayer enemyCell;
-	
+	Trap traptest ;
 	private int minimumAccel = 2;
 	 
 	@Override
@@ -37,6 +38,7 @@ public class AgaRoid extends ApplicationAdapter {
         
         cell = new CellPlayer(batch, shapeRenderer, font, "Coac", 0,0, 100);
         enemyCell = new CellPlayer(batch, shapeRenderer, font, "erer", 200, 400, 30);
+        traptest = new Trap(batch,shapeRenderer,0,100);
         
 	}
 
@@ -55,6 +57,7 @@ public class AgaRoid extends ApplicationAdapter {
 			shapeRenderer.setColor(1, 1, 0, 1);
 			cell.rendererDraw();
 			enemyCell.rendererDraw();
+            traptest.rendererDraw();
 		shapeRenderer.end();
 		
 		cameraBatch.begin();
