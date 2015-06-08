@@ -2,14 +2,17 @@ package com.agaroid;
 
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+
 
 
 import com.agaroid.cell.CellElementary;
 import com.agaroid.cell.CellPlayer;
 import com.badlogic.gdx.Game;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -34,7 +37,7 @@ public class AgaRoid extends Game {
 
 	
 	CellPlayer cell;
-	CellPlayer enemyCell;
+	ArrayList<CellPlayer> enemyCells;
 	CellElementary cellElementary;
 
 	Trap traptest ;
@@ -54,7 +57,9 @@ public class AgaRoid extends Game {
              
         
         cell = new CellPlayer(batch, shapeRenderer, font, "Coac", 0,0, 100);
-        enemyCell = new CellPlayer(batch, shapeRenderer, font, "erer", 200, 400, 30);
+
+        enemyCells = new ArrayList<CellPlayer>();
+        enemyCells.add(new CellPlayer(batch, shapeRenderer, font, "erer", 200, 400, 30));
         
         cellElementary = new CellElementary(batch,shapeRenderer, font, 100,100);
 
@@ -82,14 +87,59 @@ public class AgaRoid extends Game {
 	
 	    	  @Override
 	    	  public void call(Object... args) {
-	    		  System.out.println(args[0].toString());
+	    		  
 	    		  System.out.println("welcome");
-	    		  JSONObject obj = new JSONObject();
+	    		  JSONObject obj = new JSONObject(args[0].toString());
+	    	
+	    		  cell.setHue(obj.getInt("hue"));
+	    		  cell.setId(obj.getString("id"));
+
+	    		  obj = new JSONObject();
 	    		  obj.put("name", cell.getUsername());
-	    		  obj.put("hue", 331);
+	    		  obj.put("hue", cell.getHue());
+	    		  obj.put("id", cell.getId());
 	    		 
 	    		  
 	    		  socket.emit("gotit", obj);
+	    		 
+	    	  }
+	
+	    	});
+
+	    	socket.on("serverTellPlayerMove", new Emitter.Listener() {
+	    		
+	    	  @Override
+	    	  public void call(Object... args) {
+	    		  JSONObject obj = new JSONObject(args[0].toString());
+	    		  
+	    		  try {
+	    			  System.out.println(obj);
+		    		  cell.setX(obj.getInt("x"));
+		    		  cell.setY(obj.getInt("y"));
+
+		    		  cam.position.set(cell.getX(), cell.getY(), 0);
+		    		  render();
+	    		  }
+	    		  catch(Exception e){
+	    			  
+	    		  }
+	    		  
+	    	  }
+	
+	    	});
+
+	    	socket.on("serverUpdateAll", new Emitter.Listener() {
+	    		
+	    	  @Override
+	    	  public void call(Object... args) {
+	    	  		enemyCells.clear();
+
+	    		  JSONArray  objs = new JSONArray(args[0]);
+	    		  for (int i =0 ; i<objs.length() ; i++ ) {
+	    		  	JSONObject  obj = objs.getJSONObject(i);
+	    		  	enemyCells.add(new CellPlayer(batch, shapeRenderer, font, obj.getString("name"), obj.getInt("x"), obj.getInt("y"), obj.getInt("mass")));
+	    		  }
+
 	    	  }
 	
 	    	});
@@ -118,8 +168,8 @@ public class AgaRoid extends Game {
 	    	  public void call(Object... args) {}
 	
 	    	});
+	    	
 	    	socket.connect();
-	    	socket.emit("foo", new Object());
     	
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
@@ -142,7 +192,8 @@ public class AgaRoid extends Game {
 		shapeRenderer.begin(ShapeType.Filled);
 			shapeRenderer.setColor(1, 1, 0, 1);
 			cell.rendererDraw();
-			enemyCell.rendererDraw();
+			for(CellPlayer enemyCell : enemyCells)
+				enemyCell.rendererDraw();
 			cellElementary.rendererDraw();
 	        traptest.rendererDraw();
 		shapeRenderer.end();
@@ -153,8 +204,16 @@ public class AgaRoid extends Game {
 		
 		batch.begin();
         	cell.batchDraw();
-        	enemyCell.batchDraw();
+        	for(CellPlayer enemyCell : enemyCells)
+				enemyCell.batchDraw();
         batch.end();
+
+
+
+        JSONObject target = new JSONObject();
+        target.put("x", cell.getX());
+        target.put("y", cell.getY());
+        socket.emit("0", target);
 		 
 	}
 	

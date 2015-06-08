@@ -1,16 +1,17 @@
 package com.agaroid.cell;
 
 
+import java.util.Collection;
+
 import com.agaroid.Cell;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-/**
- * Created by Etienne on 05/06/2015.
- */
 public class CellPlayer extends Cell {
+	private BitmapFont font;
+	
     private String username;
-    BitmapFont font;
+    private String id;
 
     public CellPlayer(SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font,
                       String username, int posX, int posY, int mass) {
@@ -26,4 +27,12 @@ public class CellPlayer extends Cell {
 	public String getUsername() {
 		return this.username;
 	}
+	
+	public void setId(String i) {
+		this.id = i;
+	}
+	public String getId() {
+		return this.id;
+	}
+
 }

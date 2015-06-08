@@ -11,6 +11,7 @@ public abstract class Cell {
 	protected ShapeRenderer shapeRenderer;
 
 	protected Color color;
+	protected int hue = 300;
 	protected int posX = 200;
 	protected int posY = 200;
 	protected int mass = 200;
@@ -34,5 +35,28 @@ public abstract class Cell {
 	public void translate(int offsetX, int offsetY) {
 		posX += offsetX;
 		posY += offsetY;
+	}
+	
+	public void setHue(int h) {
+		this.hue = h;
+		
+	}
+	public int getHue() {
+		return hue;
+	}
+	
+	public int getX() {
+		return this.posX;
+	}
+	
+	public int getY() {
+		return this.posY;
+	}
+	
+	public void setX(int x) {
+		posX = x;
+	}
+	public void setY(int y) {
+		posY = y;
 	}
 }
