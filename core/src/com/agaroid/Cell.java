@@ -12,24 +12,24 @@ public abstract class Cell {
 
 	protected Color color;
 	protected int hue = 300;
-	protected int posX = 200;
-	protected int posY = 200;
+	protected double posX = 200;
+	protected double posY = 200;
 	protected int mass = 200;
 
 	public Cell(SpriteBatch batch,
-			ShapeRenderer shapeRenderer, int posX, int posY, int mass) {
+			ShapeRenderer shapeRenderer, double d, double e, int mass) {
 		super();
 		this.batch = batch;
 		this.shapeRenderer = shapeRenderer;
-		this.posX = posX;
-		this.posY = posY;
+		this.posX = d;
+		this.posY = e;
 		this.mass = mass;
         this.color = new Color((float)Math.random(),(float) Math.random(),(float) Math.random(), 1);
 	}
 	
 	public void rendererDraw() {
 		shapeRenderer.setColor(color);
-		shapeRenderer.circle(posX, posY, mass);
+		shapeRenderer.circle((float)posX, (float)posY, mass);
 	}
 	
 	public void translate(int offsetX, int offsetY) {
@@ -45,18 +45,18 @@ public abstract class Cell {
 		return hue;
 	}
 	
-	public int getX() {
+	public double getX() {
 		return this.posX;
 	}
 	
-	public int getY() {
+	public double getY() {
 		return this.posY;
 	}
 	
-	public void setX(int x) {
+	public void setX(double x) {
 		posX = x;
 	}
-	public void setY(int y) {
+	public void setY(double y) {
 		posY = y;
 	}
 }

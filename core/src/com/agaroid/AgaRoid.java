@@ -28,6 +28,10 @@ import com.github.nkzawa.socketio.client.Socket;
 
 
 public class AgaRoid extends Game {
+	boolean started = false;
+	int deltaX;
+	int deltaY;
+	
 	SpriteBatch batch;
 	SpriteBatch cameraBatch;
 	BitmapFont font;
@@ -56,7 +60,7 @@ public class AgaRoid extends Game {
         font.setColor(Color.BLACK);
              
         
-        cell = new CellPlayer(batch, shapeRenderer, font, "Coac", 0,0, 100);
+        cell = new CellPlayer(batch, shapeRenderer, font, "Coac", 100,100, 100);
 
         enemyCells = new ArrayList<CellPlayer>();
         enemyCells.add(new CellPlayer(batch, shapeRenderer, font, "erer", 200, 400, 30));
@@ -101,6 +105,7 @@ public class AgaRoid extends Game {
 	    		 
 	    		  
 	    		  socket.emit("gotit", obj);
+	    		  started = true;
 	    		 
 	    	  }
 	
@@ -112,17 +117,14 @@ public class AgaRoid extends Game {
 	    	  public void call(Object... args) {
 	    		  JSONObject obj = new JSONObject(args[0].toString());
 	    		  
-	    		  try {
-	    			  System.out.println(obj);
-		    		  cell.setX(obj.getInt("x"));
-		    		  cell.setY(obj.getInt("y"));
 
-		    		  cam.position.set(cell.getX(), cell.getY(), 0);
-		    		  render();
-	    		  }
-	    		  catch(Exception e){
-	    			  
-	    		  }
+    			  System.out.println(obj);
+	    		  cell.setX(obj.getDouble("x"));
+	    		  cell.setY(obj.getDouble("y"));
+
+	    		  cam.position.set((float)cell.getX(), (float)cell.getY(), 0);
+	    		 // render();
+	    		
 	    		  
 	    	  }
 	
@@ -133,15 +135,57 @@ public class AgaRoid extends Game {
 	    	  @Override
 	    	  public void call(Object... args) {
 	    	  		enemyCells.clear();
-
-	    		  JSONArray  objs = new JSONArray(args[0]);
+	    		  JSONArray  objs = new JSONArray(args[0].toString());
 	    		  for (int i =0 ; i<objs.length() ; i++ ) {
 	    		  	JSONObject  obj = objs.getJSONObject(i);
-	    		  	enemyCells.add(new CellPlayer(batch, shapeRenderer, font, obj.getString("name"), obj.getInt("x"), obj.getInt("y"), obj.getInt("mass")));
+	    		  	enemyCells.add(new CellPlayer(batch, shapeRenderer, font, obj.getString("name"), obj.getDouble("x"), obj.getDouble("y"), obj.getInt("mass")));
 	    		  }
 
 	    	  }
 	
+	    	});
+	    	
+	    	socket.on("playerJoin", new Emitter.Listener() {
+		    	  @Override
+		    	  public void call(Object... args) {
+		    		  enemyCells.clear();
+		    		  System.out.println(args[0].toString());
+		    		  JSONObject  o = new JSONObject(args[0].toString());
+		    		  JSONArray objs = o.getJSONArray("playersList");
+		    		  for (int i =0 ; i<objs.length() ; i++ ) {
+		    		  	JSONObject  obj = objs.getJSONObject(i);
+		    		  	enemyCells.add(new CellPlayer(batch, shapeRenderer, font, obj.getString("name"), obj.getDouble("x"), obj.getDouble("y"), obj.getInt("mass")));
+		    		  }
+		    	  }
+		
+	    	});
+	    	socket.on("playerDied", new Emitter.Listener() {
+		    	  @Override
+		    	  public void call(Object... args) {
+		    		  enemyCells.clear();
+		    		  System.out.println(args[0].toString());
+		    		  JSONObject  o = new JSONObject(args[0].toString());
+		    		  JSONArray objs = o.getJSONArray("playersList");
+		    		  for (int i =0 ; i<objs.length() ; i++ ) {
+		    		  	JSONObject  obj = objs.getJSONObject(i);
+		    		  	enemyCells.add(new CellPlayer(batch, shapeRenderer, font, obj.getString("name"), obj.getDouble("x"), obj.getDouble("y"), obj.getInt("mass")));
+		    		  }
+		    	  }
+		
+	    	});
+	    	socket.on("playerDisconnect", new Emitter.Listener() {
+		    	  @Override
+		    	  public void call(Object... args) {
+		    		  enemyCells.clear();
+		    		  System.out.println(args[0].toString());
+		    		  JSONObject  o = new JSONObject(args[0].toString());
+		    		  JSONArray objs = o.getJSONArray("playersList");
+		    		  for (int i =0 ; i<objs.length() ; i++ ) {
+		    		  	JSONObject  obj = objs.getJSONObject(i);
+		    		  	enemyCells.add(new CellPlayer(batch, shapeRenderer, font, obj.getString("name"), obj.getDouble("x"), obj.getDouble("y"), obj.getInt("mass")));
+		    		  }
+		    	  }
+		
 	    	});
 	    	
 	    	socket.on("connect_failed", new Emitter.Listener() {
@@ -153,6 +197,15 @@ public class AgaRoid extends Game {
 	
 	    	});
 	    	
+	    	socket.on("RIP", new Emitter.Listener() {
+	    		
+		    	  @Override
+		    	  public void call(Object... args) {
+		    		  started = false;
+		    	  }
+		
+	    	});
+	    	
 	    	socket.on("playerDisconnect", new Emitter.Listener() {
 	    		
 		    	  @Override
@@ -160,7 +213,7 @@ public class AgaRoid extends Game {
 		    		  System.out.println("playerDisconnect");
 		    	  }
 		
-		    	});
+	    	});
 	    	
 	    	socket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
 	
@@ -209,12 +262,12 @@ public class AgaRoid extends Game {
         batch.end();
 
 
-
-        JSONObject target = new JSONObject();
-        target.put("x", cell.getX());
-        target.put("y", cell.getY());
-        socket.emit("0", target);
-		 
+        if(started) {
+	        JSONObject target = new JSONObject();
+	        target.put("x", cell.getX() + deltaX);
+	        target.put("y", cell.getY() + deltaY );
+	        socket.emit("0", target);
+        }
 	}
 	
 	
@@ -225,22 +278,27 @@ public class AgaRoid extends Game {
         if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
             cam.zoom -= 0.02;
         }
-        
+        deltaX = 0;
+        deltaY = 0;
 		if (Gdx.input.getAccelerometerX() > minimumAccel || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            cam.translate(-3, 0, 0);
-            cell.translate(-3, 0);
+           // cam.translate(-3, 0, 0);
+            //cell.translate(-3, 0);
+            deltaX = -30;
         }
         if (Gdx.input.getAccelerometerX() < -minimumAccel || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            cam.translate(3, 0, 0);
-            cell.translate(3, 0);
+           // cam.translate(3, 0, 0);
+           // cell.translate(3, 0);
+            deltaX = 30;
         }
         if (Gdx.input.getAccelerometerY() > minimumAccel || Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            cam.translate(0, -3, 0);
-            cell.translate(0, -3);
+           // cam.translate(0, -3, 0);
+            //cell.translate(0, -3);
+            deltaY= -30;
         }
         if (Gdx.input.getAccelerometerY() < -minimumAccel || Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            cam.translate(0, 3, 0);
-            cell.translate(0, 3);
+           // cam.translate(0, 3, 0);
+           //.translate(0, 3);
+            deltaY = 30;
     
         }
         
