@@ -4,6 +4,7 @@ package com.agaroid.cell;
 import java.util.Collection;
 
 import com.agaroid.Cell;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -14,8 +15,8 @@ public class CellPlayer extends Cell {
     private String id;
 
     public CellPlayer(SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font,
-                      String username, double d, double e, int mass) {
-        super(batch,shapeRenderer,d,e,mass);
+                      String username, double d, double e, int mass, float hue) {
+        super(batch,shapeRenderer,d,e,mass, hue);
         this.username = username;
         this.glyphLayout = new GlyphLayout();
         this.glyphLayout.setText(font, username);

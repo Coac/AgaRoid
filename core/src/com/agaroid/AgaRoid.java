@@ -60,10 +60,10 @@ public class AgaRoid extends Game {
         font.setColor(Color.BLACK);
              
         
-        cell = new CellPlayer(batch, shapeRenderer, font, "Coac", 100,100, 100);
+        cell = new CellPlayer(batch, shapeRenderer, font, "Coac", 100,100, 100, 5);
 
         enemyCells = new ArrayList<CellPlayer>();
-        enemyCells.add(new CellPlayer(batch, shapeRenderer, font, "erer", 200, 400, 30));
+        
         
         
         foods = new ArrayList<CellElementary>();
@@ -124,12 +124,12 @@ public class AgaRoid extends Game {
 	    		  cam.position.set((float)cell.getX(), (float)cell.getY(), 0);
 	    		
 	    		  //PlayerList
-	    		  synchronized(foods) {
+	    		  synchronized(enemyCells) {
 		    		  enemyCells.clear();
 		    		  JSONArray  usersList = new JSONArray(args[1].toString());
 		    		  for (int i =0 ; i<usersList.length() ; i++ ) {
 		    			  JSONObject  user = usersList.getJSONObject(i);
-		    			  enemyCells.add(new CellPlayer(batch, shapeRenderer, font, user.getString("name"), user.getDouble("x"), user.getDouble("y"), user.getInt("mass")));
+		    			  enemyCells.add(new CellPlayer(batch, shapeRenderer, font, user.getString("name"), user.getDouble("x"), user.getDouble("y"), user.getInt("mass"), user.getInt("hue")/255f));
 		    		  }
 	    		  }
 	    			  
@@ -139,7 +139,7 @@ public class AgaRoid extends Game {
 		    		  JSONArray  foodList = new JSONArray(args[2].toString());
 		    		  for (int i =0 ; i<foodList.length() ; i++ ) {
 		    			  JSONObject  food = foodList.getJSONObject(i);
-		    			  foods.add(new CellElementary(batch, shapeRenderer, font, food.getDouble("x"), food.getDouble("y")));
+		    			  foods.add(new CellElementary(batch, shapeRenderer, font, food.getDouble("x"), food.getDouble("y"), 0.5f));
 		    		  }	
 	    		  }
 	    		  
@@ -153,13 +153,14 @@ public class AgaRoid extends Game {
 	    	socket.on("playerJoin", new Emitter.Listener() {
 		    	  @Override
 		    	  public void call(Object... args) {
-		    		  enemyCells.clear();
-		    		  System.out.println(args[0].toString());
-		    		  JSONObject  o = new JSONObject(args[0].toString());
-		    		  JSONArray objs = o.getJSONArray("playersList");
-		    		  for (int i =0 ; i<objs.length() ; i++ ) {
-		    		  	JSONObject  obj = objs.getJSONObject(i);
-		    		  	enemyCells.add(new CellPlayer(batch, shapeRenderer, font, obj.getString("name"), obj.getDouble("x"), obj.getDouble("y"), obj.getInt("mass")));
+		    		  synchronized(enemyCells) {
+			    		  enemyCells.clear();
+			    		  System.out.println(args[0].toString());
+			    		  JSONArray  usersList = (new JSONObject(args[0].toString())).getJSONArray("playersList");
+			    		  for (int i =0 ; i<usersList.length() ; i++ ) {
+			    			  JSONObject  user = usersList.getJSONObject(i);
+			    			  enemyCells.add(new CellPlayer(batch, shapeRenderer, font, user.getString("name"), user.getDouble("x"), user.getDouble("y"), user.getInt("mass"), user.getInt("hue")/255f));
+			    		  }
 		    		  }
 		    	  }
 		
@@ -173,7 +174,7 @@ public class AgaRoid extends Game {
 		    		  JSONArray objs = o.getJSONArray("playersList");
 		    		  for (int i =0 ; i<objs.length() ; i++ ) {
 		    		  	JSONObject  obj = objs.getJSONObject(i);
-		    		  	enemyCells.add(new CellPlayer(batch, shapeRenderer, font, obj.getString("name"), obj.getDouble("x"), obj.getDouble("y"), obj.getInt("mass")));
+		    		  	enemyCells.add(new CellPlayer(batch, shapeRenderer, font, obj.getString("name"), obj.getDouble("x"), obj.getDouble("y"), obj.getInt("mass"), obj.getInt("hue")/255f));
 		    		  }
 		    	  }
 		
@@ -187,7 +188,7 @@ public class AgaRoid extends Game {
 		    		  JSONArray objs = o.getJSONArray("playersList");
 		    		  for (int i =0 ; i<objs.length() ; i++ ) {
 		    		  	JSONObject  obj = objs.getJSONObject(i);
-		    		  	enemyCells.add(new CellPlayer(batch, shapeRenderer, font, obj.getString("name"), obj.getDouble("x"), obj.getDouble("y"), obj.getInt("mass")));
+		    		  	enemyCells.add(new CellPlayer(batch, shapeRenderer, font, obj.getString("name"), obj.getDouble("x"), obj.getDouble("y"), obj.getInt("mass"), obj.getInt("hue")/255f));
 		    		  }
 		    	  }
 		
