@@ -59,4 +59,12 @@ public abstract class Cell {
 	public void setY(double y) {
 		posY = y;
 	}
+	
+	public int getMass() {
+		return mass;
+	}
+	
+	public void setMass(int m) {
+		this.mass = m;
+	}
 }
