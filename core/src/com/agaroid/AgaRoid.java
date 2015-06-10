@@ -42,7 +42,7 @@ public class AgaRoid extends Game {
 	
 	CellPlayer cell;
 	ArrayList<CellPlayer> enemyCells;
-	CellElementary cellElementary;
+	ArrayList<CellElementary> foods;
 
 	Trap traptest ;
 	
@@ -65,8 +65,8 @@ public class AgaRoid extends Game {
         enemyCells = new ArrayList<CellPlayer>();
         enemyCells.add(new CellPlayer(batch, shapeRenderer, font, "erer", 200, 400, 30));
         
-        cellElementary = new CellElementary(batch,shapeRenderer, font, 100,100);
-
+        
+        foods = new ArrayList<CellElementary>();
         traptest = new Trap(batch,shapeRenderer,0,100);
         
         
@@ -124,11 +124,23 @@ public class AgaRoid extends Game {
 	    		  cam.position.set((float)cell.getX(), (float)cell.getY(), 0);
 	    		
 	    		  //PlayerList
-	    		  enemyCells.clear();
-	    		  JSONArray  usersList = new JSONArray(args[1].toString());
-	    		  for (int i =0 ; i<usersList.length() ; i++ ) {
-	    			  JSONObject  user = usersList.getJSONObject(i);
-	    			  enemyCells.add(new CellPlayer(batch, shapeRenderer, font, user.getString("name"), user.getDouble("x"), user.getDouble("y"), user.getInt("mass")));
+	    		  synchronized(foods) {
+		    		  enemyCells.clear();
+		    		  JSONArray  usersList = new JSONArray(args[1].toString());
+		    		  for (int i =0 ; i<usersList.length() ; i++ ) {
+		    			  JSONObject  user = usersList.getJSONObject(i);
+		    			  enemyCells.add(new CellPlayer(batch, shapeRenderer, font, user.getString("name"), user.getDouble("x"), user.getDouble("y"), user.getInt("mass")));
+		    		  }
+	    		  }
+	    			  
+	    		  //Foods
+	    		  synchronized(foods) {
+		    		  foods.clear();
+		    		  JSONArray  foodList = new JSONArray(args[2].toString());
+		    		  for (int i =0 ; i<foodList.length() ; i++ ) {
+		    			  JSONObject  food = foodList.getJSONObject(i);
+		    			  foods.add(new CellElementary(batch, shapeRenderer, font, food.getDouble("x"), food.getDouble("y")));
+		    		  }	
 	    		  }
 	    		  
 	    	  }
@@ -191,12 +203,10 @@ public class AgaRoid extends Game {
 	    	});
 	    	
 	    	socket.on("RIP", new Emitter.Listener() {
-	    		
 		    	  @Override
 		    	  public void call(Object... args) {
 		    		  started = false;
 		    	  }
-		
 	    	});
 	    	
 	    	socket.on("playerDisconnect", new Emitter.Listener() {
@@ -238,11 +248,15 @@ public class AgaRoid extends Game {
 		shapeRenderer.begin(ShapeType.Filled);
 			shapeRenderer.setColor(1, 1, 0, 1);
 			cell.rendererDraw();
+			
 			synchronized(enemyCells) {
 				for(CellPlayer enemyCell : enemyCells)
 					enemyCell.rendererDraw();
 			}
-			cellElementary.rendererDraw();
+			synchronized(foods) {
+				for(CellElementary f : foods)
+					f.rendererDraw();
+			}
 	        traptest.rendererDraw();
 		shapeRenderer.end();
 		
@@ -252,8 +266,10 @@ public class AgaRoid extends Game {
 		
 		batch.begin();
         	cell.batchDraw();
-        	for(CellPlayer enemyCell : enemyCells)
-				enemyCell.batchDraw();
+        	synchronized(enemyCells) {
+	        	for(CellPlayer enemyCell : enemyCells)
+					enemyCell.batchDraw();
+        	}
         batch.end();
 
         if(started) {

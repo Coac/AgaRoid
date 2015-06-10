@@ -1,3 +1,4 @@
+package com.agaroid;
 
 import com.agaroid.AgaRoid;
 import com.badlogic.gdx.Game;
