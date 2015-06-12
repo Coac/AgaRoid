@@ -16,54 +16,56 @@ public abstract class Cell {
 	protected double posY = 200;
 	protected int mass = 200;
 
-	public Cell(SpriteBatch batch,
-			ShapeRenderer shapeRenderer, double d, double e, int mass, float hue) {
+	public Cell(SpriteBatch batch, ShapeRenderer shapeRenderer, double d, double e, int mass, float hue) {
 		super();
 		this.batch = batch;
 		this.shapeRenderer = shapeRenderer;
 		this.posX = d;
 		this.posY = e;
 		this.mass = mass;
-        this.color = new Color((float)Math.random(),(float)Math.random(),(float)Math.random(),1);
+		this.color = new Color((float) Math.random(), (float) Math.random(),
+				(float) Math.random(), 1);
 	}
-	
+
 	public void rendererDraw() {
 		shapeRenderer.setColor(color);
-		shapeRenderer.circle((float)posX, (float)posY, mass);
+		shapeRenderer.circle((float) posX, (float) posY, mass);
 	}
-	
+
 	public void translate(int offsetX, int offsetY) {
 		posX += offsetX;
 		posY += offsetY;
 	}
-	
+
 	public void setHue(int h) {
 		this.hue = h;
-		
+
 	}
+
 	public int getHue() {
 		return hue;
 	}
-	
+
 	public double getX() {
 		return this.posX;
 	}
-	
+
 	public double getY() {
 		return this.posY;
 	}
-	
+
 	public void setX(double x) {
 		posX = x;
 	}
+
 	public void setY(double y) {
 		posY = y;
 	}
-	
+
 	public int getMass() {
 		return mass;
 	}
-	
+
 	public void setMass(int m) {
 		this.mass = m;
 	}
