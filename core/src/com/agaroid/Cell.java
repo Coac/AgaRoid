@@ -24,7 +24,7 @@ public abstract class Cell {
 		this.posX = d;
 		this.posY = e;
 		this.mass = mass;
-        this.color = new Color(hue,0,0, 1f);
+        this.color = new Color((float)Math.random(),(float)Math.random(),(float)Math.random(),1);
 	}
 	
 	public void rendererDraw() {

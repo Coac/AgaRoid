@@ -8,8 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 
-
-
 import com.agaroid.cell.CellElementary;
 import com.agaroid.cell.CellPlayer;
 import com.badlogic.gdx.Game;
@@ -49,9 +47,11 @@ public class AgaRoid extends Game {
 	Socket socket;
 
 	private int minimumAccel = 2;
-	 
+
+
 	@Override
-	public void create () {
+	public void create () {	
+		 
 		cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		shapeRenderer = new ShapeRenderer();
 		batch = new SpriteBatch();
@@ -129,7 +129,7 @@ public class AgaRoid extends Game {
 		    		  JSONArray  usersList = new JSONArray(args[1].toString());
 		    		  for (int i =0 ; i<usersList.length() ; i++ ) {
 		    			  JSONObject  user = usersList.getJSONObject(i);
-		    			  enemyCells.add(new CellPlayer(batch, shapeRenderer, font, user.getString("name"), user.getDouble("x"), user.getDouble("y"), user.getInt("mass"), user.getInt("hue")/255f));
+		    			  enemyCells.add(new CellPlayer(batch, shapeRenderer, font, user.getString("name"), user.getDouble("x"), user.getDouble("y"), user.getInt("mass"), user.getInt("hue")));
 		    		  }
 	    		  }
 	    			  
@@ -159,7 +159,7 @@ public class AgaRoid extends Game {
 			    		  JSONArray  usersList = (new JSONObject(args[0].toString())).getJSONArray("playersList");
 			    		  for (int i =0 ; i<usersList.length() ; i++ ) {
 			    			  JSONObject  user = usersList.getJSONObject(i);
-			    			  enemyCells.add(new CellPlayer(batch, shapeRenderer, font, user.getString("name"), user.getDouble("x"), user.getDouble("y"), user.getInt("mass"), user.getInt("hue")/255f));
+			    			  enemyCells.add(new CellPlayer(batch, shapeRenderer, font, user.getString("name"), user.getDouble("x"), user.getDouble("y"), user.getInt("mass"), user.getInt("hue")));
 			    		  }
 		    		  }
 		    	  }
@@ -174,7 +174,7 @@ public class AgaRoid extends Game {
 		    		  JSONArray objs = o.getJSONArray("playersList");
 		    		  for (int i =0 ; i<objs.length() ; i++ ) {
 		    		  	JSONObject  obj = objs.getJSONObject(i);
-		    		  	enemyCells.add(new CellPlayer(batch, shapeRenderer, font, obj.getString("name"), obj.getDouble("x"), obj.getDouble("y"), obj.getInt("mass"), obj.getInt("hue")/255f));
+		    		  	enemyCells.add(new CellPlayer(batch, shapeRenderer, font, obj.getString("name"), obj.getDouble("x"), obj.getDouble("y"), obj.getInt("mass"), obj.getInt("hue")));
 		    		  }
 		    	  }
 		
@@ -188,7 +188,7 @@ public class AgaRoid extends Game {
 		    		  JSONArray objs = o.getJSONArray("playersList");
 		    		  for (int i =0 ; i<objs.length() ; i++ ) {
 		    		  	JSONObject  obj = objs.getJSONObject(i);
-		    		  	enemyCells.add(new CellPlayer(batch, shapeRenderer, font, obj.getString("name"), obj.getDouble("x"), obj.getDouble("y"), obj.getInt("mass"), obj.getInt("hue")/255f));
+		    		  	enemyCells.add(new CellPlayer(batch, shapeRenderer, font, obj.getString("name"), obj.getDouble("x"), obj.getDouble("y"), obj.getInt("mass"), obj.getInt("hue")));
 		    		  }
 		    	  }
 		
@@ -239,6 +239,7 @@ public class AgaRoid extends Game {
 	public void render () {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
 		
 		handleInput();
 		cam.update();
